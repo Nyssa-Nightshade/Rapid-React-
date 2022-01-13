@@ -4,19 +4,25 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
-public class ExampleSubsystem extends SubsystemBase {
+public class LiftSubsystem extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
-  public ExampleSubsystem() {}
+  private static TalonFX leftLiftMotor = new TalonFX(Constants.LEFT_LIFT_MOTOR);
+  private static TalonFX rightLiftMotor = new TalonFX(Constants.RIGHT_LIFT_MOTOR);
+  public LiftSubsystem() {}
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void m_liftUp(){
+    leftLiftMotor.set(TalonFXControlMode.PercentOutput, Constants.LIFT_UP_SPEED);
+    rightLiftMotor.set(TalonFXControlMode.PercentOutput, Constants.LIFT_UP_SPEED);
   }
 
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+  public void m_liftDown(){
+    leftLiftMotor.set(TalonFXControlMode.PercentOutput, Constants.LIFT_DOWN_SPEED);
+    rightLiftMotor.set(TalonFXControlMode.PercentOutput, Constants.LIFT_DOWN_SPEED);
   }
 }

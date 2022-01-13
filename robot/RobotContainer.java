@@ -7,10 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.commands.*;
 
@@ -29,14 +29,23 @@ public class RobotContainer {
 
   private final DriveTrainSubsystem sub_driveTrainSubsystem = new DriveTrainSubsystem();
   
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  //Lift related subsystems
+
+  private final LiftSubsystem sub_liftSubsystem = new LiftSubsystem();
 
   /*
   ---------------------------------------------------------Commands------------------------------------------------------------------------
   */
   
+  //Lift related commands
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final LiftUpCommand cmd_liftUpCommand = new LiftUpCommand(sub_liftSubsystem);
+  private final LiftDownCommand cmd_liftDownCommand = new LiftDownCommand(sub_liftSubsystem);
+
+
+
+
+
 
   private final AutoCommand cmd_autoCommand = new AutoCommand(sub_driveTrainSubsystem);
 
@@ -45,15 +54,17 @@ public class RobotContainer {
   --------------------------------------------------------Joysticks-----------------------------------------------------------------------------
   */
   private final Joystick driveJoystick = new Joystick(Constants.DRIVE_JOYSTICK_PORT);
+  private final Joystick buttonsJoystick = new Joystick(Constants.BUTTONS_JOYSTICK_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
         sub_driveTrainSubsystem.setDefaultCommand(
       new DriveCommand(sub_driveTrainSubsystem, 
-      () -> -driveJoystick.getRawAxis(1), 
-      () -> -driveJoystick.getRawAxis(2),
-      () -> driveJoystick.getRawAxis(3)));
+      () -> -driveJoystick.getRawAxis(Constants.X),
+      () -> -driveJoystick.getRawAxis(Constants.Y), 
+      () -> -driveJoystick.getRawAxis(Constants.Z),
+      () -> driveJoystick.getRawAxis(Constants.S)));
 
     configureButtonBindings();
   }
@@ -64,7 +75,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    JoystickButton b_liftUpButton = new JoystickButton(buttonsJoystick, Constants.LIFT_UP_BUTTON);
+    b_liftUpButton.whileHeld(cmd_liftUpCommand, Constants.NOT_INTERRUPTIBLE);
+
+    JoystickButton b_liftDownButton = new JoystickButton(buttonsJoystick, Constants.LIFT_DOWN_BUTTON);
+    b_liftDownButton.whileHeld(cmd_liftDownCommand, Constants.NOT_INTERRUPTIBLE);
+
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

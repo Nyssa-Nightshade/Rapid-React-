@@ -25,7 +25,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
   }
 
-  public void m_arcadeDrive(double forward, double rotation, double throttle) {
+  public void m_arcadeDrive(double sideways, double forward, double rotation, double throttle) {
 
     frontLeftMotor.setNeutralMode(NeutralMode.Brake);
     rearLeftMotor.setNeutralMode(NeutralMode.Brake);

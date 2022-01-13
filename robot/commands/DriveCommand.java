@@ -13,11 +13,12 @@ import java.util.function.DoubleSupplier;
  
 public class DriveCommand extends CommandBase {
   private final DriveTrainSubsystem sub_driveTrainSubsystem;
+  private DoubleSupplier m_sideways;
   private DoubleSupplier m_forward;
   private DoubleSupplier m_rotation;
   private DoubleSupplier m_throttle;
  
-  public DriveCommand(DriveTrainSubsystem subsystem, DoubleSupplier forward, DoubleSupplier twist, DoubleSupplier throttle) {
+  public DriveCommand(DriveTrainSubsystem subsystem, DoubleSupplier sideways, DoubleSupplier forward, DoubleSupplier twist, DoubleSupplier throttle) {
     sub_driveTrainSubsystem = subsystem;
     m_forward = forward;
     m_rotation = twist;
@@ -28,6 +29,6 @@ public class DriveCommand extends CommandBase {
  
   @Override
   public void execute() {
-    sub_driveTrainSubsystem.m_arcadeDrive(m_forward.getAsDouble(), m_rotation.getAsDouble(), (-m_throttle.getAsDouble()+1)/2);
+    sub_driveTrainSubsystem.m_arcadeDrive(m_sideways.getAsDouble(), m_forward.getAsDouble(), m_rotation.getAsDouble(), (-m_throttle.getAsDouble()+1)/2);
   }
 }
